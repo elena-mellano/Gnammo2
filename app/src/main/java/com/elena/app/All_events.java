@@ -51,7 +51,9 @@ public class All_events extends ActionBarActivity {
         }
 
 
-       listView = (ListView)findViewById(R.id.list);
+
+
+       listView = (ListView)findViewById(R.id.listView);
         array = new ArrayList();
         adapter = new AdapterList(this, R.layout.row, array);
         listView.setAdapter(adapter);

@@ -10,4 +10,6 @@ public class Seat implements Serializable {
     private int max;
     private int reserved;
     private int min;
+
+    public int getAvailable(){return available;}
 }

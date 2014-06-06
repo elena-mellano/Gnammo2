@@ -8,4 +8,7 @@ import java.io.Serializable;
 public class MenuEv implements Serializable {
     private String description;
     private String title;
+
+    public String getTitle() {return title;};
+    public String getDescription() {return description;};
 }

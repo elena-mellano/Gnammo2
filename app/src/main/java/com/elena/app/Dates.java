@@ -9,4 +9,5 @@ public class Dates implements Serializable {
     private Day ends_subscription;
     private Day takes_place;
     public String getDay(){return takes_place.getDay();};
+    public String getends(){return ends_subscription.getDay();};
 }

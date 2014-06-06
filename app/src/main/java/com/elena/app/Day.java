@@ -39,6 +39,6 @@ public class Day implements Serializable {
                 return (day + " Dicembre");
 
         }
-        return ("Evento senza data");
+        return ("No data");
     }
 }
