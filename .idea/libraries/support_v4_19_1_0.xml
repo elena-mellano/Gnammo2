@@ -4,12 +4,8 @@
       <root url="jar://$APPLICATION_HOME_DIR$/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar!/" />
     </CLASSES>
     <JAVADOC />
-<<<<<<< HEAD
-    <SOURCES />
-=======
     <SOURCES>
       <root url="jar://$APPLICATION_HOME_DIR$/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0-sources.jar!/" />
     </SOURCES>
->>>>>>> 21010f33707ae7ff1239b18334b26fb878a1e362
   </library>
 </component>
