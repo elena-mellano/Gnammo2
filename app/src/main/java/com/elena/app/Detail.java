@@ -21,7 +21,6 @@ public class Detail extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail);
-
         Event e=(Event)getIntent().getSerializableExtra("event");
         Button b1 = (Button)findViewById(R.id.button);
         b1.setText("Rimangono " + e.getSeats().getAvailable()+ " posti liberi");
@@ -53,8 +52,7 @@ public class Detail extends ActionBarActivity {
                 } catch (MalformedURLException e1) {
                     e1.printStackTrace();
                 }
-                //BitmapFactory.Options options=new BitmapFactory.Options();
-              //  options.inSampleSize = 8;
+
                 bitmap = BitmapFactory.decodeStream(urleff.openStream());
                 ImageView imag  = (ImageView)findViewById(R.id.imageView);
 
@@ -64,7 +62,7 @@ public class Detail extends ActionBarActivity {
             e2.printStackTrace();
         }
         url=e.getOwner().getUrlImg();
-        bitmap=null;
+        Bitmap bitmap2=null;
         try {
             if (url.compareTo("")!=0){
                 URL urleff = null;
@@ -73,18 +71,15 @@ public class Detail extends ActionBarActivity {
                 } catch (MalformedURLException e1) {
                     e1.printStackTrace();
                 }
-                //BitmapFactory.Options options=new BitmapFactory.Options();
-                //  options.inSampleSize = 8;
-                bitmap = BitmapFactory.decodeStream(urleff.openStream());
+                BitmapFactory.Options options2=new BitmapFactory.Options();
+                options2.inSampleSize =4;
+                bitmap2 = BitmapFactory.decodeStream(urleff.openStream(), null, options2);
                 ImageView img  = (ImageView)findViewById(R.id.imageView2);
 
-                img.setImageBitmap(bitmap);
+                img.setImageBitmap(bitmap2);
             }
         }catch (IOException e2){
             e2.printStackTrace();
         }
-
-
-
     }
 }

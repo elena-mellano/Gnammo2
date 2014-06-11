@@ -53,7 +53,7 @@ public class All_events extends ActionBarActivity {
 
 
 
-       listView = (ListView)findViewById(R.id.listView);
+        listView = (ListView)findViewById(R.id.listView);
         array = new ArrayList();
         adapter = new AdapterList(this, R.layout.row, array);
         listView.setAdapter(adapter);
@@ -163,7 +163,7 @@ public class All_events extends ActionBarActivity {
 
         protected void onPostExecute(Integer i) {
             adapter.notifyDataSetChanged();
-            this.cancel(true);
+            //this.cancel(true);
         }
 
     }
