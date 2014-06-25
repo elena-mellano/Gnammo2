@@ -1,6 +1,12 @@
 package com.elena.app;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by elena on 21/05/14.
@@ -66,6 +72,29 @@ public class Event implements Serializable {
     public  Location getLocation(){return location;}
     public void setLocation(Location s){location=s;}
     private Rel rel;
+
+    private Bitmap img;
+
+    public void setImg(String url){
+        Bitmap bitmap=null;
+        try {
+            if (url.compareTo("")!=0){
+                URL urleff = null;
+                try {
+                    urleff = new URL(url);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                BitmapFactory.Options options=new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                bitmap = BitmapFactory.decodeStream(urleff.openStream(), null, options);
+                img = bitmap;
+            }
+        }catch (IOException e2){
+            e2.printStackTrace();
+        }
+    }
+    public Bitmap getImg(){return img;}
 
 
     public String getUrlImg(){return album.getUrlImg();}

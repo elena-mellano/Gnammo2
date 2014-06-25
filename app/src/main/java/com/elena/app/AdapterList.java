@@ -14,10 +14,10 @@ import java.util.ArrayList;
  * Created by elena on 22/05/14.
  */
 
-public class AdapterList extends ArrayAdapter<ListEvent> {
+public class AdapterList extends ArrayAdapter<Event> {
 
     public AdapterList(Context context, int textViewResourceId,
-                            ArrayList<ListEvent> objects) {
+                            Event[] objects) {
         super(context, textViewResourceId, objects);
     }
 
@@ -33,9 +33,9 @@ public class AdapterList extends ArrayAdapter<ListEvent> {
         TextView title  = (TextView)convertView.findViewById(R.id.text);
         TextView owner  = (TextView)convertView.findViewById(R.id.textowner);
         ImageView imag  = (ImageView)convertView.findViewById(R.id.image);
-        ListEvent single = getItem(position);
+        Event single = getItem(position);
         title.setText(single.getTitle());
-        owner.setText(single.getOwner());
+        owner.setText(single.getOwner().getName());
         imag.setImageBitmap(single.getImg());
 
         return convertView;

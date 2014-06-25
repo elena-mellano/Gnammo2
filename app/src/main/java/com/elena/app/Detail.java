@@ -1,9 +1,11 @@
 package com.elena.app;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.View;
@@ -18,53 +20,40 @@ import java.net.URL;
 /**
  * Created by elena on 01/06/14.
  */
-public class Detail extends ActionBarActivity {
-    Event e;
+public class Detail extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail);
-        e=(Event)getIntent().getSerializableExtra("event");
+
+        /* retrieving all the informations in order to display them */
+/*
         Button b1 = (Button)findViewById(R.id.button);
-        b1.setText("Rimangono " + e.getSeats().getAvailable()+ " posti liberi");
+        b1.setText("Rimangono " + getIntent().getExtras().getInt("seats_avaible") + " posti liberi");
+
         TextView t5 = (TextView)findViewById(R.id.textView6);
-        t5.setText(e.getTitle());
+        t5.setText(getIntent().getExtras().getString("title"));
         TextView t1 = (TextView)findViewById(R.id.textView2);
-        t1.setText(e.getLocation().getCity());
+        t1.setText(getIntent().getExtras().getString("location"));
         TextView t2 = (TextView)findViewById(R.id.textView3);
-        t2.setText(String.valueOf(e.getPrice())  +" Euro");
+        t2.setText(String.valueOf(getIntent().getExtras().getDouble("price"))  +" Euro");
         TextView t3 = (TextView)findViewById(R.id.textView4);
-        t3.setText(e.getDates().getDay());
+        t3.setText(getIntent().getExtras().getString("date_start"));
         TextView t4 = (TextView)findViewById(R.id.textView5);
-        t4.setText(e.getDates().getDay());
+        t4.setText(getIntent().getExtras().getString("date_end"));
         TextView t6 = (TextView)findViewById(R.id.textView7);
-        t6.setText(Html.fromHtml(e.getDescription()));
+        t6.setText(Html.fromHtml(getIntent().getExtras().getString("event_description")));
         TextView t7 = (TextView)findViewById(R.id.textView);
-        t7.setText(e.getMenu().getTitle());
+        t7.setText(getIntent().getExtras().getString("title_menu"));
         TextView t8 = (TextView)findViewById(R.id.textView8);
-        t8.setText(Html.fromHtml(e.getMenu().getDescription()));
+        t8.setText(Html.fromHtml(getIntent().getExtras().getString("description_menu")));
         TextView t9 = (TextView)findViewById(R.id.textView9);
-        t9.setText(e.getOwner().getName());
-        String url=e.getUrlImg();
-        Bitmap bitmap=null;
-        try {
-            if (url.compareTo("")!=0){
-                URL urleff = null;
-                try {
-                    urleff = new URL(url);
-                } catch (MalformedURLException e1) {
-                    e1.printStackTrace();
-                }
+        t9.setText(getIntent().getExtras().getString("owner"));
+        ImageView imag  = (ImageView)findViewById(R.id.imageView);
+        imag.setImageBitmap((Bitmap) getIntent().getParcelableExtra("single_event_bitmap"));
+        String url= getIntent().getExtras().getString("owner_img");
 
-                bitmap = BitmapFactory.decodeStream(urleff.openStream());
-                ImageView imag  = (ImageView)findViewById(R.id.imageView);
-
-                imag.setImageBitmap(bitmap);
-            }
-        }catch (IOException e2){
-            e2.printStackTrace();
-        }
-        url=e.getOwner().getUrlImg();
         Bitmap bitmap2=null;
         try {
             if (url.compareTo("")!=0){
@@ -83,12 +72,12 @@ public class Detail extends ActionBarActivity {
             }
         }catch (IOException e2){
             e2.printStackTrace();
-        }
+        } */
     }
 
     public void onClick(View vo){
         Intent start=new Intent(Detail.this, Login.class);
-        start.putExtra("event", e);
+        //start.putExtra("event", e);
         startActivity(start);
     }
 }

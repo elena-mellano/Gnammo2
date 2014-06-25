@@ -1,17 +1,17 @@
 package com.elena.app;
 
-import android.content.Intent;
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -32,30 +32,85 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
-public class All_events extends ActionBarActivity {
-    ArrayList<ListEvent> array = null;
-    AdapterList adapter=null;
-    ListView listView;
+public class All_events extends FragmentActivity implements ActionBar.TabListener {
+
+    ActionBar actionBar;
+    ViewPager viewPager;
     Event [] ev;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_events);
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+
+        /* GET and POST initialization */
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        /* Reading data from JSON, putting results into array ev */
+        ev = null;
+
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        ResponseHandler<String> responseHandler = new BasicResponseHandler();
+        HttpGet getMethod = new HttpGet("http://staging.gnammo.com/api/2/events");
+        //getMethod.setHeader("Content-type", "application/json")
+        Gson gson =new Gson();
+        Event_Vector e=null;
+        try{
+            HttpResponse response = httpClient.execute(getMethod);
+            StatusLine statusLine = response.getStatusLine();
+            HttpEntity entity = response.getEntity();
+            InputStream content = entity.getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+            e = gson.fromJson(reader, Event_Vector.class);
+        }catch(IOException e1) {        }
+
+        ev = e.getEvents();
+        // Now we got all the data into ev array
+
+        /* IMPLEMENTING TABS */
+        // get the ViewPager handle
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter( new MyPageAdapter( getSupportFragmentManager(), ev ) );
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                actionBar.setSelectedNavigationItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        // create the actionBar and sets navigation mode to TABS
+        actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // create TAB 1
+        ActionBar.Tab list_tab = actionBar.newTab();
+        list_tab.setText("Event List");
+        list_tab.setTabListener(this);
+
+        // create TAB 2
+        ActionBar.Tab map_tab = actionBar.newTab();
+        map_tab.setText("Event Map");
+        map_tab.setTabListener(this);
+
+        // add TABS to actionBar
+        actionBar.addTab(list_tab);
+        actionBar.addTab(map_tab);
 
 
-
-
+        /*
         listView = (ListView)findViewById(R.id.listView);
-        array = new ArrayList();
+
         adapter = new AdapterList(this, R.layout.row, array);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -69,54 +124,28 @@ public class All_events extends ActionBarActivity {
 
 
             }
-        });
+        }); */
 
-        ev = null;
-
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            ResponseHandler<String> responseHandler = new BasicResponseHandler();
-            HttpGet getMethod = new HttpGet("http://staging.gnammo.com/api/2/events");
-            //getMethod.setHeader("Content-type", "application/json")
-            Gson gson =new Gson();
-            Event_Vector e=null;
-            try{
-                HttpResponse response = httpClient.execute(getMethod);
-                StatusLine statusLine = response.getStatusLine();
-                HttpEntity entity = response.getEntity();
-                InputStream content = entity.getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-                e = gson.fromJson(reader, Event_Vector.class);
-
-            }catch(IOException e1){
-
-            }
-            ev = e.getEvents();
-
-
-        int j;
-
-        for (j=0;j<ev.length;j++){
+        /* in fragment
+        for (int j=0;j<ev.length;j++){
             try {
             new GnammoSync().execute(ev[j]);
             } catch(Exception err) {}
 
-        }
+        }  */
 
 
     }
 
 
 
-
+    /* Option menu */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.all_events, menu);
         return true;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -130,23 +159,11 @@ public class All_events extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
+    /*
+        Background operation to load event list
      */
-    public static class PlaceholderFragment extends Fragment {
 
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_all_events, container, false);
-            return rootView;
-        }
-    }
-
-    private class GnammoSync extends AsyncTask<Event, Integer, Integer> {
+    /*private class GnammoSync extends AsyncTask<Event, Integer, Integer> {
 
         protected Integer doInBackground(Event... evs) {
             ListEvent tmp = new ListEvent();
@@ -168,5 +185,62 @@ public class All_events extends ActionBarActivity {
             //this.cancel(true);
         }
 
+    } */
+
+    /*
+        OnTab listeners, used for changing tabs
+     */
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+}
+
+/*
+    Implementing pageAdapter, used to change tabs
+ */
+
+class MyPageAdapter extends FragmentPagerAdapter {
+
+    Event[] ev;
+    Bundle bundle = null;
+
+    MyPageAdapter(FragmentManager fm, Event[] event_list) {
+        super(fm);
+        ev = event_list;
+        bundle = new Bundle();
+        bundle.putSerializable("event_list", ev);
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        Fragment fragment = null;
+        switch (position) {
+
+            case 0: fragment = new EventListFragment();
+                    // passing event_list vector to fragment through Bundle
+                    fragment.setArguments(bundle);
+                break;
+
+            case 1: fragment = new EventMapFragment();
+                    // passing event_list vector to fragment through Bundle
+                    fragment.setArguments(bundle);
+                break;
+        }
+        return fragment;
+    }
+
+    @Override
+    public int getCount() {
+        return 2;
     }
 }
