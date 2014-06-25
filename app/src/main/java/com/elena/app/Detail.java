@@ -1,10 +1,12 @@
 package com.elena.app;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,11 +19,12 @@ import java.net.URL;
  * Created by elena on 01/06/14.
  */
 public class Detail extends ActionBarActivity {
+    Event e;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail);
-        Event e=(Event)getIntent().getSerializableExtra("event");
+        e=(Event)getIntent().getSerializableExtra("event");
         Button b1 = (Button)findViewById(R.id.button);
         b1.setText("Rimangono " + e.getSeats().getAvailable()+ " posti liberi");
         TextView t5 = (TextView)findViewById(R.id.textView6);
@@ -81,5 +84,11 @@ public class Detail extends ActionBarActivity {
         }catch (IOException e2){
             e2.printStackTrace();
         }
+    }
+
+    public void onClick(View vo){
+        Intent start=new Intent(Detail.this, Login.class);
+        start.putExtra("event", e);
+        startActivity(start);
     }
 }

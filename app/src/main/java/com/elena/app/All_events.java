@@ -61,9 +61,9 @@ public class All_events extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adattatore, final View componente, int pos, long id){
                 Intent start=new Intent(All_events.this, Detail.class);
-                Event e = ev[pos];
+                Event e1 = ev[pos];
 
-                start.putExtra("event", e);
+                start.putExtra("event", e1);
 
                 startActivity(start);
 
@@ -75,7 +75,8 @@ public class All_events extends ActionBarActivity {
 
             DefaultHttpClient httpClient = new DefaultHttpClient();
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
-            HttpGet getMethod = new HttpGet("http://gnammo.com/api/2/events?&v=1");
+            HttpGet getMethod = new HttpGet("http://staging.gnammo.com/api/2/events");
+            //getMethod.setHeader("Content-type", "application/json")
             Gson gson =new Gson();
             Event_Vector e=null;
             try{

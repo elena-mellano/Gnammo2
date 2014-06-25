@@ -17,7 +17,8 @@
             android:text="New Button"
             android:id="@+id/button"
             android:layout_margin="5dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:onClick="onClick" />
 
         <ImageView
             android:layout_width="200dp"

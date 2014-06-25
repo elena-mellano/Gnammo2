@@ -2,11 +2,17 @@
 <pre-dex-items>
 
     <item
-        dex="/Users/ivano/GitHub_Repositories/Gnammo2/app/build/intermediates/pre-dexed/debug/classes-d096af098bc8ef5a58317d8e54f19c4f03c112ab.jar"
-        jar="/Users/ivano/GitHub_Repositories/Gnammo2/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.1.0/classes.jar"
+        dex="/Users/ivano/GitHub_Repositories/Gnammo2/app/build/intermediates/pre-dexed/debug/paypal_mpl_5-18-139eebc391790d7398e4d4ab834a7075d0fd6e97.jar"
+        jar="/Users/ivano/GitHub_Repositories/Gnammo2/app/src/libs/paypal_mpl_5-18.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
+        sha1="e224158cb4fded96056e57270069368a6be8effb"/>
+    <item
+        dex="/Users/ivano/GitHub_Repositories/Gnammo2/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
+        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
     <item
         dex="/Users/ivano/GitHub_Repositories/Gnammo2/app/build/intermediates/pre-dexed/debug/gson-2.2.4-eb18f401ac84a1f9335878a4673f056f583090fc.jar"
         jar="/Users/ivano/GitHub_Repositories/Gnammo2/app/src/libs/gson-2.2.4.jar"
@@ -14,10 +20,10 @@
         revision="19.1.0"
         sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8"/>
     <item
-        dex="/Users/ivano/GitHub_Repositories/Gnammo2/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
-        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
+        dex="/Users/ivano/GitHub_Repositories/Gnammo2/app/build/intermediates/pre-dexed/debug/classes-d096af098bc8ef5a58317d8e54f19c4f03c112ab.jar"
+        jar="/Users/ivano/GitHub_Repositories/Gnammo2/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.1.0/classes.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
 
 </pre-dex-items>
