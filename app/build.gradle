@@ -24,5 +24,7 @@ dependencies {
     compile files('/src/libs/gson-2.2.4.jar')
     compile files('src/libs/gson-2.2.4.jar')
     compile files('src/libs/paypal_mpl_5-18.jar')
+    compile 'com.android.support:appcompat-v7:19.+'
+    compile 'com.google.android.gms:play-services:4.3.23'
 
 }

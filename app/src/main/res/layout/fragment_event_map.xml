@@ -1,13 +1,51 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tabexample.app.EventMapFragment">
+    tools:context=".MapActivity" >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="event map" />
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:text="+"
+        android:id="@+id/increase"
+        android:layout_gravity="left|top"
+        android:onClick="onClickIncrease"
+        android:clickable="false" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:text="-"
+        android:id="@+id/decrease"
+        android:layout_gravity="left|top"
+        android:layout_marginTop="78dp"
+        android:onClick="onClickDecrease" />
+
+    <TextView
+        android:layout_width="48dp"
+        android:layout_height="30dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="50"
+        android:id="@+id/radiusView"
+        android:layout_gravity="left|top"
+        android:layout_marginTop="48dp"
+        android:textSize="20dp"
+        android:textIsSelectable="false"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:gravity="center_vertical|center_horizontal"
+        android:clickable="false"
+        android:editable="false" />
 
 </FrameLayout>
