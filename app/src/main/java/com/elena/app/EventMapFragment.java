@@ -69,13 +69,15 @@ public class EventMapFragment extends Fragment
             CameraPosition cp = savedInstanceState.getParcelable("CameraPosition");
             mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cp));
         }
-        else {
-            // set the view to Granada
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.179373, -3.600186), 13));
-        }
 
         // get system suppot for GPS
         locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+
+        // getting my actual latitude and longitude
+        Location myLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        // setting default view on my position
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), 13));
 
         // handle buttons
         Button increase = (Button) getActivity().findViewById(R.id.increase);
@@ -104,9 +106,6 @@ public class EventMapFragment extends Fragment
                 // add new marker to marker vector
                 markerList.add(marker);
 
-            }else{
-                Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title(ev[i].getTitle()));
-                markerList.add(marker);
             }
         }
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
