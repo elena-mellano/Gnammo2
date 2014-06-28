@@ -7,7 +7,8 @@ import java.io.Serializable;
  */
 public class Viewport implements Serializable {
    Position northeast;
-   Position southwest;
+    Position southwest;
 
-   public Position getPosition() {return northeast;}
+    public Position getPosition() {return northeast;}
+
 }

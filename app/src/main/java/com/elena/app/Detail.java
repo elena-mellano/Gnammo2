@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +26,7 @@ public class Detail extends Activity {
         setContentView(R.layout.detail);
 
         /* retrieving all the informations in order to display them */
-/*
+
         Button b1 = (Button)findViewById(R.id.button);
         b1.setText("Rimangono " + getIntent().getExtras().getInt("seats_avaible") + " posti liberi");
 
@@ -72,12 +70,17 @@ public class Detail extends Activity {
             }
         }catch (IOException e2){
             e2.printStackTrace();
-        } */
+        }
     }
 
     public void onClick(View vo){
         Intent start=new Intent(Detail.this, Login.class);
-        //start.putExtra("event", e);
+         /* passing all the informations to the next activity in order to display */
+
+        start.putExtra("title", getIntent().getExtras().getString("title"));
+        start.putExtra("price", getIntent().getExtras().getDouble("price"));
+        start.putExtra("event_description", getIntent().getExtras().getString("event_description"));
+
         startActivity(start);
     }
 }

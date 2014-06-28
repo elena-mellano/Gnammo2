@@ -41,18 +41,56 @@ import java.math.RoundingMode;
 public class Login extends ActionBarActivity implements View.OnClickListener {
 
     private ProgressDialog _progressDialog;
-    private boolean _paypalLibraryInit = false;
+   //private boolean _paypalLibraryInit = false;
     private boolean _progressDialogRunning = false;
     private CheckoutButton launchPayPalButton;
     final static public int PAYPAL_BUTTON_ID = 10001;
     private static final int REQUEST_PAYPAL_CHECKOUT = 2;
     Event e;
+    Gnammo g;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+       /* Thread libraryInitializationThread = new Thread() {
+            public void run() {
+                initLibrary();
+            }
+        };
+        libraryInitializationThread.start();*/
+
+        g=(Gnammo)this.getApplication();
+        if (g.getLog()==0) {
+            setContentView(R.layout.login);
+        } else{
+            load_already_logged();
+        }
         e=(Event)getIntent().getSerializableExtra("event");
-        initLibrary();
+
+
+    }
+
+    private void load_already_logged() {
+        setContentView(R.layout.already_logged);
+        // insert the PayPal button
+        // Check if the PayPal Library has been initialized yet. If it has, show
+        // the "Pay with PayPal button"
+        // If not, show a progress indicator and start a loop that keeps
+        // checking the init status
+        if (g.getpaypalLibraryInit()) {
+            showPayPalButton();
+        } else {
+            // Display a progress dialog to the user and start checking for when
+            // the initialization is completed
+            _progressDialog = new ProgressDialog(this);
+            _progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            _progressDialog.setMessage("Loading PayPal Payment Library");
+            _progressDialog.setCancelable(false);
+            _progressDialog.show();
+            _progressDialogRunning = true;
+            Thread newThread = new Thread(checkforPayPalInitRunnable);
+            newThread.start();
+        }
+
     }
 
     public void onClick(View arg0) {
@@ -73,26 +111,19 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
         EditText e1 = (EditText) findViewById(R.id.editText2);
         String psw = e1.getText().toString();
         String result = "";
+
         try {
             // 1. create HttpClient
             DefaultHttpClient httpclient = new DefaultHttpClient();
-
             // 2. make POST request to the given URL
             HttpPost httpPost = new HttpPost(url);
-
             String json = "";
-
             // 3. build jsonObject
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("username", name);
             jsonObject.accumulate("password", psw);
-
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
-
-            // ** Alternative way to convert Person object to JSON string usin Jackson Lib
-            // ObjectMapper mapper = new ObjectMapper();
-            // json = mapper.writeValueAsString(person);
 
             // 5. set json to StringEntity
             StringEntity se = new StringEntity(json);
@@ -114,7 +145,17 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
             LoginJson l = gson.fromJson(reader, LoginJson.class);
 
             if (l.getStatus() == 200) {
-                if (_paypalLibraryInit) {
+                g.setLOg(1);
+                g.setUser(name);
+                TextView t5 = (TextView) findViewById(R.id.textView4);
+                t5.setText("Benvenuto "+g.getUser() );
+                // insert the PayPal button
+                // Check if the PayPal Library has been initialized yet. If it has, show
+                // the "Pay with PayPal button"
+                // If not, show a progress indicator and start a loop that keeps
+                // checking the init status
+
+                if (g.getpaypalLibraryInit()) {
                     showPayPalButton();
                 } else {
                     // Display a progress dialog to the user and start checking for when
@@ -137,9 +178,23 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
             result = "InputStream" + err.getMessage();
         }
     }
+
+    // PayPal Activity Results. This handles all the responses from the PayPal
+    // Payments Library
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        if (requestCode == REQUEST_PAYPAL_CHECKOUT) {
+            PayPalActivityResult(requestCode, resultCode, intent);
+        }
+
+    }
+
+
     /**********************************
      * PayPal library related methods
      **********************************/
+
 
     // This lets us show the PayPal Button after the library has been
     // initialized
@@ -162,7 +217,7 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
     private void checkForPayPalLibraryInit() {
         // Loop as long as the library is not initialized
 
-        while (_paypalLibraryInit == false) {
+        while (g.getpaypalLibraryInit() == false) {
             try {
                 // wait 1/2 a second then check again
                 Thread.sleep(500);
@@ -202,9 +257,8 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
         if (pp == null) {
             // This is the main initialization call that takes in your Context,
             // the Application ID, and the server you would like to connect to.
-            pp = PayPal.initWithAppID(this, "APP-80W284485P519543T",
-                    PayPal.ENV_NONE);
-
+            pp =  PayPal.initWithAppID(this, "APP-80W284485P519543T",
+                  PayPal.ENV_SANDBOX);
             // -- These are required settings.
             pp.setLanguage("en_US"); // Sets the language for the library.
             // --
@@ -223,7 +277,7 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
             // create a class that implements PaymentAdjuster and Serializable.
             pp.setDynamicAmountCalculationEnabled(false);
             // --
-            _paypalLibraryInit = true;
+            g.setpaypalLibraryInit(true);
         }
     }
 
@@ -269,17 +323,16 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
 //	- this must be called from the onClick() method implemented by the application
 //
     public void PayPalButtonClick(View arg0) {
-
         // Create a basic PayPalPayment.
         PayPalPayment payment = new PayPalPayment();
         // Sets the currency type for this payment.
-        payment.setCurrencyType("USD");
+        payment.setCurrencyType("EUR");
         // Sets the recipient for the payment. This can also be a phone
         // number.
-        payment.setRecipient("pd_1265515509_biz@yahoo.com");
+        payment.setRecipient("email@email.com");
         // Sets the amount of the payment, not including tax and shipping
         // amounts.
-        BigDecimal st = new BigDecimal(e.getPrice());
+        BigDecimal st = new BigDecimal(getIntent().getExtras().getDouble("price"));
         st = st.setScale(2, RoundingMode.HALF_UP);
         payment.setSubtotal(st);
         // Sets the payment type. This can be PAYMENT_TYPE_GOODS,
@@ -292,9 +345,9 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
         // be filled out. These are not required for any transaction.
         PayPalInvoiceData invoice = new PayPalInvoiceData();
         // Sets the tax amount.
-        BigDecimal tax = new BigDecimal(3);
-        tax = tax.setScale(2, RoundingMode.HALF_UP);
-        invoice.setTax(tax);
+        //BigDecimal tax = new BigDecimal("3");
+        //tax = tax.setScale(2, RoundingMode.HALF_UP);
+        //invoice.setTax(tax);
 
 
 
@@ -302,14 +355,14 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
         // PayPalInvoiceItem has several parameters available to it. None of these parameters is required.
         PayPalInvoiceItem item1 = new PayPalInvoiceItem();
         // Sets the name of the item.
-        item1.setName("Pizza");
+        item1.setName(getIntent().getExtras().getString("title"));
         // Sets the ID. This is any ID that you would like to have associated with the item.
-        item1.setID("1234");
+        //item1.setID("1234");
         // Sets the total price which should be (quantity * unit price). The total prices of all PayPalInvoiceItem should add up
         // to less than or equal the subtotal of the payment.
-        item1.setTotalPrice(new BigDecimal(e.getPrice()));
+        item1.setTotalPrice(new BigDecimal(getIntent().getExtras().getDouble("price")));
         // Sets the unit price.
-        item1.setUnitPrice(new BigDecimal(e.getPrice()));
+        item1.setUnitPrice(new BigDecimal(getIntent().getExtras().getDouble("price")));
         // Sets the quantity.
         item1.setQuantity(1);
         // Add the PayPalInvoiceItem to the PayPalInvoiceData. Alternatively, you can create an ArrayList<PayPalInvoiceItem>
@@ -322,9 +375,9 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
         payment.setInvoiceData(invoice);
         // Sets the merchant name. This is the name of your Application or
         // Company.
-        payment.setMerchantName("Pizza Express");
+        payment.setMerchantName("Gnammo");
         // Sets the description of the payment.
-        payment.setDescription(e.getTitle());
+        payment.setDescription(getIntent().getExtras().getString("event_description"));
 
         // Use checkout to create our Intent.
         Intent checkoutIntent = PayPal.getInstance()
@@ -348,11 +401,11 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
                 // The payment succeeded
                 String payKey = intent
                         .getStringExtra(PayPalActivity.EXTRA_PAY_KEY);
-               // this.paymentSucceeded(payKey);
+                this.paymentSucceeded(payKey);
                 break;
             case Activity.RESULT_CANCELED:
                 // The payment was canceled
-               // this.paymentCanceled();
+                this.paymentCanceled();
                 break;
             case PayPalActivity.RESULT_FAILURE:
                 // The payment failed -- we get the error from the
@@ -361,9 +414,28 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
                         .getStringExtra(PayPalActivity.EXTRA_ERROR_ID);
                 String errorMessage = intent
                         .getStringExtra(PayPalActivity.EXTRA_ERROR_MESSAGE);
-             //   this.paymentFailed(errorID, errorMessage);
+                this.paymentFailed(errorID, errorMessage);
         }
     }
+
+
+    //text
+
+    public void paymentSucceeded(String payKey) {
+        // We could show the transactionID to the user
+
+    }
+
+    public void paymentFailed(String errorID, String errorMessage) {
+        // We could let the user know the payment failed here
+
+    }
+
+    public void paymentCanceled() {
+
+    }
+
+
 }
 
 

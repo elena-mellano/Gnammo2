@@ -1,15 +1,17 @@
 package com.elena.app;
 
 
-
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -33,37 +35,38 @@ public class EventListFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Retrieve the event_list from activity
         ev = (Event[]) getArguments().getSerializable("event_list");
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_list, container, false);
+
+         // Inflate the layout for this fragment
+        View fragment_list=inflater.inflate(R.layout.fragment_event_list, container, false);
+
+
+        return fragment_list;
     }
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // setting the images from urls
-        for (int i=0; i<ev.length; i++) {
-            ev[i].setImg( ev[i].getUrlImg() );
-        }
-
         // getting listView handler to fill with informations
         listView = (ListView) getActivity().findViewById(R.id.listView);
-        // setting the adapter to the ListView
+        //setting the adapter to the ListView
         adapter = new AdapterList(getActivity(), R.layout.row, ev );
         listView.setAdapter(adapter);
+
         // implementing the onClick listener to the listView
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adattatore, final View componente, int pos, long id){
                 Intent start=new Intent(getActivity() , Detail.class);
 
                 /* passing all the informations to the next activity in order to display */
-
-                //start.putExtra("seats_avaible", ev[pos].getSeats().getAvailable());
-               /* start.putExtra("single_event_bitmap", ev[pos].getImg());
+                start.putExtra("seats_avaible", ev[pos].getSeats().getAvailable());
                 start.putExtra("title", ev[pos].getTitle());
                 start.putExtra("location", ev[pos].getLocation().getCity());
                 start.putExtra("price", ev[pos].getPrice());
@@ -73,14 +76,20 @@ public class EventListFragment extends Fragment {
                 start.putExtra("title_menu", ev[pos].getMenu().getTitle());
                 start.putExtra("description_menu", ev[pos].getMenu().getDescription());
                 start.putExtra("owner", ev[pos].getOwner().getName());
-                start.putExtra("owner_img", ev[pos].getOwner().getUrlImg()); */
+                start.putExtra("owner_img", ev[pos].getOwner().getUrlImg());
+                ImageView imageView = (ImageView)componente.findViewById(R.id.image);
 
-                startActivityForResult(start, 0);
+                BitmapDrawable b =(BitmapDrawable)imageView.getDrawable();
+                Bitmap bitmap = b.getBitmap();
+                start.putExtra("single_event_bitmap",bitmap) ;
+
+                startActivity(start);
 
 
 
             }
         });
+
 
     }
 

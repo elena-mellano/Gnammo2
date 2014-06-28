@@ -1,6 +1,8 @@
 package com.elena.app;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by elena on 22/05/14.
@@ -20,6 +24,7 @@ public class AdapterList extends ArrayAdapter<Event> {
                             Event[] objects) {
         super(context, textViewResourceId, objects);
     }
+    Bitmap img;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -36,9 +41,35 @@ public class AdapterList extends ArrayAdapter<Event> {
         Event single = getItem(position);
         title.setText(single.getTitle());
         owner.setText(single.getOwner().getName());
-        imag.setImageBitmap(single.getImg());
+        Bitmap bitmap=null;
+        String url=single.getUrlImg();
+        img=null;
+        try {
+            if (url.compareTo("")!=0){
+                URL urleff = null;
+                try {
+                    urleff = new URL(url);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                BitmapFactory.Options options=new BitmapFactory.Options();
+                options.inSampleSize = 4;
+                bitmap = BitmapFactory.decodeStream(urleff.openStream(), null, options);
+                img = bitmap;
+            }
+        }catch (IOException e2){
+            e2.printStackTrace();
+        }
+
+
+
+        imag.setImageBitmap(img);
 
         return convertView;
+    }
+
+    public Bitmap getImage(){
+        return(img);
     }
 
 }

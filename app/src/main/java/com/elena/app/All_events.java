@@ -2,7 +2,6 @@ package com.elena.app;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -12,10 +11,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import com.google.gson.Gson;
-
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -29,7 +26,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 
 public class All_events extends FragmentActivity implements ActionBar.TabListener {
@@ -108,31 +104,6 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
         actionBar.addTab(map_tab);
 
 
-        /*
-        listView = (ListView)findViewById(R.id.listView);
-
-        adapter = new AdapterList(this, R.layout.row, array);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adattatore, final View componente, int pos, long id){
-                Intent start=new Intent(All_events.this, Detail.class);
-                Event e1 = ev[pos];
-
-                start.putExtra("event", e1);
-
-                startActivity(start);
-
-
-            }
-        }); */
-
-        /* in fragment
-        for (int j=0;j<ev.length;j++){
-            try {
-            new GnammoSync().execute(ev[j]);
-            } catch(Exception err) {}
-
-        }  */
 
 
     }
@@ -203,6 +174,8 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
+
+
 }
 
 /*
@@ -224,11 +197,13 @@ class MyPageAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;
+
         switch (position) {
 
             case 0: fragment = new EventListFragment();
                     // passing event_list vector to fragment through Bundle
                     fragment.setArguments(bundle);
+
                 break;
 
             case 1: fragment = new EventMapFragment();

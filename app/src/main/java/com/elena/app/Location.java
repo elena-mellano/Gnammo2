@@ -8,14 +8,14 @@ import java.io.Serializable;
 
 public class Location implements Serializable {
     private String geo_lng;
-    private String city;
-    private String geo_lat;
-    private String telephone_no;
-    private String address;
-    private int pk;
-    private String title;
-    private String email;
-    private Viewport viewport;
+    private String        city;
+    private String        geo_lat;
+    private String        telephone_no;
+    private String        address;
+    private int      pk;
+    private String      title;
+    private String        email;
+    private Viewport       viewport;
 
     public String getCity(){return city;}
     public Viewport getViewport() {return viewport;}

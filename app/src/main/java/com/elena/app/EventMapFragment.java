@@ -1,7 +1,10 @@
 package com.elena.app;
 
-import android.location.*;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -16,11 +20,15 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 
 public class EventMapFragment extends Fragment
-                                implements  View.OnClickListener {
+        implements  View.OnClickListener {
 
     private GoogleMap mMap;
     private double radius = 3.0;
@@ -88,10 +96,60 @@ public class EventMapFragment extends Fragment
                 lng = viewPort.getPosition().getLng();
                 // creating new marker
                 Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(ev[i].getTitle()));
+
                 // add new marker to marker vector
+                markerList.add(marker);
+
+            }else{
+                Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title(ev[i].getTitle()));
                 markerList.add(marker);
             }
         }
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                int pos=markerList.indexOf(marker);
+                Intent start = new Intent(getActivity(), Detail.class);
+
+                /* passing all the informations to the next activity in order to display */
+                start.putExtra("seats_avaible", ev[pos].getSeats().getAvailable());
+                start.putExtra("title", ev[pos].getTitle());
+                start.putExtra("location", ev[pos].getLocation().getCity());
+                start.putExtra("price", ev[pos].getPrice());
+                start.putExtra("date_start", ev[pos].getDates().getDay());
+                start.putExtra("date_end", ev[pos].getDates().getends());
+                start.putExtra("event_description", ev[pos].getDescription());
+                start.putExtra("title_menu", ev[pos].getMenu().getTitle());
+                start.putExtra("description_menu", ev[pos].getMenu().getDescription());
+                start.putExtra("owner", ev[pos].getOwner().getName());
+                start.putExtra("owner_img", ev[pos].getOwner().getUrlImg());
+                Bitmap bitmap=null;
+                String url=ev[pos].getUrlImg();
+                Bitmap img=null;
+                try {
+                    if (url.compareTo("")!=0){
+                        URL urleff = null;
+                        try {
+                            urleff = new URL(url);
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+                        BitmapFactory.Options options=new BitmapFactory.Options();
+                        options.inSampleSize = 4;
+                        bitmap = BitmapFactory.decodeStream(urleff.openStream(), null, options);
+                        img = bitmap;
+                    }
+                }catch (IOException e2){
+                    e2.printStackTrace();
+                }
+                start.putExtra("single_event_bitmap",bitmap);
+                startActivity(start);
+
+
+                return false;
+            }
+        });
 
         setMarkersInRadius(radius);
     }
@@ -148,18 +206,18 @@ public class EventMapFragment extends Fragment
     public void onClick(View view) {
         switch( view.getId()) {
             case R.id.increase:
-                            if ( radius < 150 ) {
-                                radius += 0.5;
-                                radiusView.setText(String.valueOf(radius));
-                            }
-                            setMarkersInRadius(radius);
+                if ( radius < 150 ) {
+                    radius += 0.5;
+                    radiusView.setText(String.valueOf(radius));
+                }
+                setMarkersInRadius(radius);
                 break;
             case R.id.decrease:
-                            if ( radius > 0.5 ) {
-                                radius -= 0.5;
-                                radiusView.setText(String.valueOf(radius));
-                            }
-                            setMarkersInRadius(radius);
+                if ( radius > 0.5 ) {
+                    radius -= 0.5;
+                    radiusView.setText(String.valueOf(radius));
+                }
+                setMarkersInRadius(radius);
                 break;
         }
     }

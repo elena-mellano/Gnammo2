@@ -7,10 +7,8 @@ import java.io.Serializable;
  */
 public class Position implements Serializable {
 
-    double lat;
-    double lng;
-
+        double lat;
+        double lng;
     public double getLat() {return lat;}
     public double getLng() {return lng;}
-
 }
