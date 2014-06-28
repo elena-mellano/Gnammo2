@@ -3,6 +3,7 @@ package com.elena.app;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,6 +39,7 @@ public class EventMapFragment extends Fragment
     Event[] ev = null;
     ArrayList<Marker> markerList = null;
     LocationManager locationManager;
+    Circle circle;
 
     public EventMapFragment() {
         // Required empty public constructor
@@ -169,6 +173,16 @@ public class EventMapFragment extends Fragment
 
             // getting my actual latitude and longitude
             Location myLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            // setting the circle around my position with radius size
+            if (circle != null) { circle.remove(); }
+
+            circle = mMap.addCircle( new CircleOptions()
+                    .center(new LatLng(myLocation.getLatitude(), myLocation.getLongitude() ))
+                    .radius(radius*1000)
+                    .strokeWidth(2)
+                    .strokeColor(Color.BLUE)
+                    .fillColor(Color.parseColor("#500084d3")));
 
             /* for every marker, calculate distance from user and decide whether to show it or not */
             for (int i=0; i < markerList.size(); i++) {
