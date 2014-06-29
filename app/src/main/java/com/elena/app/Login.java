@@ -41,7 +41,6 @@ import java.math.RoundingMode;
 public class Login extends ActionBarActivity implements View.OnClickListener {
 
     private ProgressDialog _progressDialog;
-   //private boolean _paypalLibraryInit = false;
     private boolean _progressDialogRunning = false;
     private CheckoutButton launchPayPalButton;
     final static public int PAYPAL_BUTTON_ID = 10001;
@@ -51,17 +50,11 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       /* Thread libraryInitializationThread = new Thread() {
-            public void run() {
-                initLibrary();
-            }
-        };
-        libraryInitializationThread.start();*/
 
         g=(Gnammo)this.getApplication();
-        if (g.getLog()==0) {
+        if ( g.getLog() == 0 ) {
             setContentView(R.layout.login);
-        } else{
+        } else {
             load_already_logged();
         }
         e=(Event)getIntent().getSerializableExtra("event");

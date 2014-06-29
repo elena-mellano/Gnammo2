@@ -13,6 +13,10 @@
     <string name="reload">Reload</string>
     <string name="event_list">Event List</string>
     <string name="event_map">Event Map</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="reserve">Login and reserve</string>
+
     <!--  month  -->
     <string name="January">January</string>
     <string name="February">February</string>

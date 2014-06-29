@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Per poter prenotare devi autenticarti"
+        android:text="@string/login"
         android:id="@+id/textView2"
         android:layout_margin="5dp"
         android:layout_gravity="center_horizontal"
@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nome"
+            android:text="@string/username"
             android:id="@+id/textView3" />
 
         <EditText
@@ -50,7 +50,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Password"
+            android:text="@string/password"
             android:id="@+id/textView" />
 
         <EditText
@@ -65,7 +65,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accedi e prenota"
+        android:text="@string/reserve"
         android:id="@+id/button"
         android:layout_margin="5dp"
         android:layout_gravity="center_horizontal"
