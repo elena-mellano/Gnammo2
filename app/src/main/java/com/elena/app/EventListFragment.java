@@ -70,8 +70,8 @@ public class EventListFragment extends Fragment {
                 start.putExtra("title", ev[pos].getTitle());
                 start.putExtra("location", ev[pos].getLocation().getCity());
                 start.putExtra("price", ev[pos].getPrice());
-                start.putExtra("date_start", ev[pos].getDates().getDay());
-                start.putExtra("date_end", ev[pos].getDates().getends());
+                start.putExtra("date_start", ev[pos].getDates().getDay(getActivity()));
+                start.putExtra("date_end", ev[pos].getDates().getends(getActivity()));
                 start.putExtra("event_description", ev[pos].getDescription());
                 start.putExtra("title_menu", ev[pos].getMenu().getTitle());
                 start.putExtra("description_menu", ev[pos].getMenu().getDescription());

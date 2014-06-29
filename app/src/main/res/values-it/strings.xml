@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Gnammo</string>
+    <string name="euro">Euro</string>
+    <string name="seat">posti disponibili</string>
+    <string name="there_are">Ci sono</string>
+    <string name="already_logged">Sei già loggato</string>
+    <string name="login">Devi loggarti</string>
+    <string name="no_internet">Non hai internet abilitato</string>
+    <string name="activated_internet">Attiva il wifi o i dati</string>
+    <string name="close">Esci</string>
+    <string name="reload">Reload</string>
+    <string name="event_list">Lista Eventi</string>
+    <string name="event_map">Mappa Eventi</string>
+    <!--  month  -->
+    <string name="January">Gennaio</string>
+    <string name="February">Febbraio</string>
+    <string name="March">Marzo</string>
+    <string name="April">Aprile</string>
+    <string name="May">Maggio</string>
+    <string name="June">Giugno</string>
+    <string name="July">Luglio</string>
+    <string name="August">Agosto</string>
+    <string name="September">Settembre</string>
+    <string name="October">Ottobre</string>
+    <string name="November">Novembre</string>
+    <string name="December">Dicembre</string>
+
+</resources>

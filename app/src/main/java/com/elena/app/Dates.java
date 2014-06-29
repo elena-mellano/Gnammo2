@@ -1,5 +1,7 @@
 package com.elena.app;
 
+import android.content.Context;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,6 @@ import java.io.Serializable;
 public class Dates implements Serializable {
     private Day ends_subscription;
     private Day takes_place;
-    public String getDay(){return takes_place.getDay();};
-    public String getends(){return ends_subscription.getDay();};
+    public String getDay(Context c){return takes_place.getDay(c);};
+    public String getends(Context c ){return ends_subscription.getDay(c);};
 }

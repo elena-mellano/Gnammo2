@@ -28,14 +28,17 @@ public class Detail extends Activity {
         /* retrieving all the informations in order to display them */
 
         Button b1 = (Button)findViewById(R.id.button);
-        b1.setText("Rimangono " + getIntent().getExtras().getInt("seats_avaible") + " posti liberi");
+        b1.setText(getResources().getString(R.string.there_are) +
+                " " + getIntent().getExtras().getInt("seats_avaible") +
+                " " + getResources().getString(R.string.seat) );
 
         TextView t5 = (TextView)findViewById(R.id.textView6);
         t5.setText(getIntent().getExtras().getString("title"));
         TextView t1 = (TextView)findViewById(R.id.textView2);
         t1.setText(getIntent().getExtras().getString("location"));
         TextView t2 = (TextView)findViewById(R.id.textView3);
-        t2.setText(String.valueOf(getIntent().getExtras().getDouble("price"))  +" Euro");
+        t2.setText(String.valueOf(getIntent().getExtras().getDouble("price")) +
+                " " + getResources().getString(R.string.euro));
         TextView t3 = (TextView)findViewById(R.id.textView4);
         t3.setText(getIntent().getExtras().getString("date_start"));
         TextView t4 = (TextView)findViewById(R.id.textView5);

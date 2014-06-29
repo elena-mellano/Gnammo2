@@ -1,7 +1,9 @@
 package com.elena.app;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -38,6 +40,8 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_events);
 
+        Boolean errors = false;
+
         /* GET and POST initialization */
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -52,57 +56,91 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
         HttpGet getMethod = new HttpGet("http://staging.gnammo.com/api/2/events");
 
 
-
         //getMethod.setHeader("Content-type", "application/json")
-        Gson gson =new Gson();
-        Event_Vector e=null;
-        try{
+        Gson gson = new Gson();
+        Event_Vector e = null;
+        try {
             HttpResponse response = httpClient.execute(getMethod);
             HttpEntity entity = response.getEntity();
             InputStream content = entity.getContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(content));
             e = gson.fromJson(reader, Event_Vector.class);
             ev = e.getEvents();
-        }catch(IOException e1) {        }
+        } catch (IOException e1) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+            // set title
+            alertDialogBuilder.setTitle(R.string.no_internet);
+
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage(R.string.activated_internet)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, close
+                            // current activity
+                            All_events.this.finish();
+                        }
+                    })
+                    .setNegativeButton(R.string.reload, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, just close
+                            // the dialog box and do nothing
+                            finish();
+                            startActivity(getIntent());
+                        }
+                    });
+
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
+
+            // show it
+            alertDialog.show();
+            errors = true;
+
+        }
 
         // Now we got all the data into ev array
 
+        if (errors == false) {
         /* IMPLEMENTING TABS */
-        // get the ViewPager handle
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter( new MyPageAdapter( getSupportFragmentManager(), ev ) );
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+            // get the ViewPager handle
+            viewPager = (ViewPager) findViewById(R.id.pager);
+            viewPager.setAdapter(new MyPageAdapter(getSupportFragmentManager(), ev));
+            viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                }
 
-            @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
-            }
+                @Override
+                public void onPageSelected(int position) {
+                    actionBar.setSelectedNavigationItem(position);
+                }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                }
+            });
 
-        // create the actionBar and sets navigation mode to TABS
-        actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+            // create the actionBar and sets navigation mode to TABS
+            actionBar = getActionBar();
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        // create TAB 1
-        ActionBar.Tab list_tab = actionBar.newTab();
-        list_tab.setText("Event List");
-        list_tab.setTabListener(this);
+            // create TAB 1
+            ActionBar.Tab list_tab = actionBar.newTab();
+            list_tab.setText(R.string.event_list);
+            list_tab.setTabListener(this);
 
-        // create TAB 2
-        ActionBar.Tab map_tab = actionBar.newTab();
-        map_tab.setText("Event Map");
-        map_tab.setTabListener(this);
+            // create TAB 2
+            ActionBar.Tab map_tab = actionBar.newTab();
+            map_tab.setText(R.string.event_map);
+            map_tab.setTabListener(this);
 
-        // add TABS to actionBar
-        actionBar.addTab(list_tab);
-        actionBar.addTab(map_tab);
+            // add TABS to actionBar
+            actionBar.addTab(list_tab);
+            actionBar.addTab(map_tab);
+        }
     }
 
     /* Option menu */
@@ -111,18 +149,6 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.all_events, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     /*

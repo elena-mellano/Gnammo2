@@ -2,7 +2,29 @@
 <resources>
 
     <string name="app_name">Gnammo</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="euro">Euro</string>
+    <string name="seat">seats available</string>
+    <string name="there_are">There are</string>
+    <string name="already_logged">You are already logged in</string>
+    <string name="login">You have to log in</string>
+    <string name="no_internet">You don\'t have internet enabled</string>
+    <string name="activated_internet">Activate wifi or traffic data</string>
+    <string name="close">Close Application</string>
+    <string name="reload">Reload</string>
+    <string name="event_list">Event List</string>
+    <string name="event_map">Event Map</string>
+    <!--  month  -->
+    <string name="January">January</string>
+    <string name="February">February</string>
+    <string name="March">March</string>
+    <string name="April">April</string>
+    <string name="May">May</string>
+    <string name="June">June</string>
+    <string name="July">July</string>
+    <string name="August">August</string>
+    <string name="September">September</string>
+    <string name="October">October</string>
+    <string name="November">November</string>
+    <string name="December">December</string>
 
 </resources>
