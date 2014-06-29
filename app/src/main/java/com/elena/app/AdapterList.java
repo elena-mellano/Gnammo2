@@ -46,9 +46,10 @@ public class AdapterList extends ArrayAdapter<Event> {
         Event single = getItem(position);
         holder.title.setText(single.getTitle());
         holder.owner.setText(single.getOwner().getName());
+        holder.url = single.getUrlImg();
 
         if (holder.imageView != null) {
-            new ImageDownloaderTask(holder.imageView).execute(single.getUrlImg());
+            new ImageDownloaderTask().execute(holder);
         }
 
         return convertView;
@@ -58,59 +59,47 @@ public class AdapterList extends ArrayAdapter<Event> {
         TextView title;
         TextView owner;
         ImageView imageView;
+        String url;
+        Bitmap img;
     }
 
 }
 
-class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
-    private final WeakReference imageViewReference;
-
-    public ImageDownloaderTask(ImageView imageView) {
-        imageViewReference = new WeakReference(imageView);
-    }
+class ImageDownloaderTask extends AsyncTask<AdapterList.ViewHolder, Void, AdapterList.ViewHolder> {
 
     @Override
     // Actual download method, run in the task thread
-    protected Bitmap doInBackground(String... params) {
+    protected AdapterList.ViewHolder doInBackground(AdapterList.ViewHolder... params) {
         // params comes from the execute() call: params[0] is the url.
         Bitmap bitmap=null;
-        Bitmap img = null;
+        AdapterList.ViewHolder viewHolder = params[0];
 
         try {
-            if (params[0].compareTo("") != 0){
+            if (viewHolder.url != null){
                 URL urleff = null;
                 try {
-                    urleff = new URL(params[0]);
+                    urleff = new URL(viewHolder.url);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
                 BitmapFactory.Options options=new BitmapFactory.Options();
                 options.inSampleSize = 6;
                 bitmap = BitmapFactory.decodeStream(urleff.openStream(), null, options);
-                img = bitmap;
+                viewHolder.img = bitmap;
             }
         }catch (IOException e2){
             e2.printStackTrace();
         }
-        return img;
+        return viewHolder;
     }
 
     @Override
     // Once the image is downloaded, associates it to the imageView
-    protected void onPostExecute(Bitmap bitmap) {
-        if (isCancelled()) {
-            bitmap = null;
+    protected void onPostExecute(AdapterList.ViewHolder viewHolder) {
+        if (viewHolder.img != null) {
+            viewHolder.imageView.setImageBitmap(viewHolder.img);
         }
 
-        if (imageViewReference != null) {
-            ImageView imageView = (ImageView) imageViewReference.get();
-            if (imageView != null) {
-
-                if (bitmap != null) {
-                    imageView.setImageBitmap(bitmap);
-                }
-            }
-        }
     }
 
 }
