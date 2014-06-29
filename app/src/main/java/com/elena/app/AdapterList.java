@@ -53,7 +53,7 @@ public class AdapterList extends ArrayAdapter<Event> {
                     e.printStackTrace();
                 }
                 BitmapFactory.Options options=new BitmapFactory.Options();
-                options.inSampleSize = 4;
+                options.inSampleSize = 6;
                 bitmap = BitmapFactory.decodeStream(urleff.openStream(), null, options);
                 img = bitmap;
             }

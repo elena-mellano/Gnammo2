@@ -62,7 +62,7 @@ public class Detail extends Activity {
                     e1.printStackTrace();
                 }
                 BitmapFactory.Options options2=new BitmapFactory.Options();
-                options2.inSampleSize =4;
+                options2.inSampleSize = 8;
                 bitmap2 = BitmapFactory.decodeStream(urleff.openStream(), null, options2);
                 ImageView img  = (ImageView)findViewById(R.id.imageView2);
 

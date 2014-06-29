@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -48,20 +47,24 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
 
         DefaultHttpClient httpClient = new DefaultHttpClient();
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
+
+
         HttpGet getMethod = new HttpGet("http://staging.gnammo.com/api/2/events");
+
+
+
         //getMethod.setHeader("Content-type", "application/json")
         Gson gson =new Gson();
         Event_Vector e=null;
         try{
             HttpResponse response = httpClient.execute(getMethod);
-            StatusLine statusLine = response.getStatusLine();
             HttpEntity entity = response.getEntity();
             InputStream content = entity.getContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(content));
             e = gson.fromJson(reader, Event_Vector.class);
+            ev = e.getEvents();
         }catch(IOException e1) {        }
 
-        ev = e.getEvents();
         // Now we got all the data into ev array
 
         /* IMPLEMENTING TABS */
@@ -71,7 +74,6 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
@@ -81,7 +83,6 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -102,13 +103,7 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
         // add TABS to actionBar
         actionBar.addTab(list_tab);
         actionBar.addTab(map_tab);
-
-
-
-
     }
-
-
 
     /* Option menu */
     @Override
@@ -131,34 +126,6 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
     }
 
     /*
-        Background operation to load event list
-     */
-
-    /*private class GnammoSync extends AsyncTask<Event, Integer, Integer> {
-
-        protected Integer doInBackground(Event... evs) {
-            ListEvent tmp = new ListEvent();
-            tmp.setTitle(evs[0].getTitle());
-            tmp.setOwner(evs[0].getOwner2());
-            tmp.setImg(evs[0].getUrlImg());
-            array.add(tmp);
-            return 0;
-        }
-
-
-
-        protected void onProgressUpdate(Integer... progress) {
-
-        }
-
-        protected void onPostExecute(Integer i) {
-            adapter.notifyDataSetChanged();
-            //this.cancel(true);
-        }
-
-    } */
-
-    /*
         OnTab listeners, used for changing tabs
      */
 
@@ -174,13 +141,11 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
-
-
 }
 
-/*
-    Implementing pageAdapter, used to change tabs
- */
+    /*
+        Implementing pageAdapter, used to change tabs
+    */
 
 class MyPageAdapter extends FragmentPagerAdapter {
 
