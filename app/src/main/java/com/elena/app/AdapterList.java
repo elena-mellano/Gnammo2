@@ -42,16 +42,14 @@ public class AdapterList extends ArrayAdapter<Event> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
         Event single = getItem(position);
         holder.title.setText(single.getTitle());
         holder.owner.setText(single.getOwner().getName());
         holder.url = single.getUrlImg();
-
+        holder.imageView.setImageBitmap(null);
         if (holder.imageView != null) {
             new ImageDownloaderTask().execute(holder);
         }
-
         return convertView;
     }
 
@@ -73,9 +71,9 @@ class ImageDownloaderTask extends AsyncTask<AdapterList.ViewHolder, Void, Adapte
         // params comes from the execute() call: params[0] is the url.
         Bitmap bitmap=null;
         AdapterList.ViewHolder viewHolder = params[0];
-
+        viewHolder.img = null;
         try {
-            if (viewHolder.url != null){
+            if ((viewHolder.url).compareTo("")!=0){
                 URL urleff = null;
                 try {
                     urleff = new URL(viewHolder.url);
@@ -99,7 +97,5 @@ class ImageDownloaderTask extends AsyncTask<AdapterList.ViewHolder, Void, Adapte
         if (viewHolder.img != null) {
             viewHolder.imageView.setImageBitmap(viewHolder.img);
         }
-
     }
-
 }

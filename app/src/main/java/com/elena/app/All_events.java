@@ -53,7 +53,7 @@ public class All_events extends FragmentActivity implements ActionBar.TabListene
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
 
 
-        HttpGet getMethod = new HttpGet("http://staging.gnammo.com/api/2/events");
+        HttpGet getMethod = new HttpGet("http://gnammo.com/api/2/events");
 
 
         //getMethod.setHeader("Content-type", "application/json")
